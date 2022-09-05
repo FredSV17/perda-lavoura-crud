@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel
 from typing import List
 
@@ -7,13 +8,12 @@ class GetLossResponseBody(BaseModel):
     producer_email: str
     producer_cpf:str
     crop_local:str
-    harvest_date:str
+    harvest_date:datetime
     crop_type:str
     event_type:str
 
 class ListLossResponseBody(BaseModel):
     entries: List[GetLossResponseBody]
-    size: int
 
 class PostLossResponseBody(BaseModel):
     producer_name: str

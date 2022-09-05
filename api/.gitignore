@@ -1,4 +1,10 @@
-.vscode
 venv
-endpoints/__pycache__
+makefile
 __pycache__
+.vscode
+endpoints/__pycache__
+data_access/__pycache__
+controller/__pycache__
+services/__pycache__
+api_models/__pycache__
+database/__pycache__

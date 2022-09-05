@@ -40,7 +40,24 @@ class DALoss():
         db_conn.connection.commit()
         db_conn.close_connection()
 
+    def get_loss(id):
+        db_conn = DatabaseManager()
+        sql_exec = """SELECT * FROM loss WHERE id=%s"""
+        params = (id,)
+        db_conn.cursor.execute(sql_exec,params)
+        result = db_conn.cursor.fetchone()
+        db_conn.close_connection()
+        return result
 
+    def list_by_date(date):
+        db_conn = DatabaseManager()
+        sql_exec = """SELECT * FROM loss WHERE harvest_date=%s"""
+        params = (date,)
+        db_conn.cursor.execute(sql_exec,params)
+        result = db_conn.cursor.fetchall()
+        db_conn.close_connection()
+        return result        
+        
     def list_loss_by_cpf(cpf):
         db_conn = DatabaseManager()
         sql_exec = """SELECT * FROM loss WHERE producer_cpf=%s"""
