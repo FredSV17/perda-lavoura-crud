@@ -1,15 +1,22 @@
+from multiprocessing import connection
 import flask_mysqldb
 import mysql.connector
 from flask_mysqldb import MySQL    
 
 class DatabaseManager:
-    connection = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="flaskdocker"
-    )
-    cur = connection.cursor()
+    connection = None
+    cursor = None
+    def __init__(self) -> None:
+        self.connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="loss_db"
+        )
+        self.cursor = self.connection.cursor()
+        
+    def close_connection(self):
+        self.cursor.close()
 
 
     # cur.execute("""INSERT INTO users(name) VALUES(%s)""",('angelo',))
