@@ -4,16 +4,22 @@ from data_access.loss_DA import DALoss
 from services.validation import Validation
 
 class LossManager():
+
+    def clear_table():
+        DALoss.clear_table()
+        return "",200
+
     def new_loss(producer_name, producer_email, producer_CPF, crop_local, crop_type, harvest_date, event_type):
         same_date_events = DALoss.list_by_date(harvest_date)
         if Validation.check_if_similar(crop_local,same_date_events):
-            abort(400, {"message":"Eventos similares existem no sistema!"})
+            return "Eventos similares existem no sistema!",400
         else:
             error_msg = Validation.validate(producer_CPF,producer_email)
             if error_msg == None:
-                DALoss.new_loss(producer_name, producer_email, producer_CPF, crop_local, crop_type, harvest_date, event_type)
+                id = DALoss.new_loss(producer_name, producer_email, producer_CPF, crop_local, crop_type, harvest_date, event_type)
+                return id,201
             else:
-                abort(400, {"message": error_msg})
+                return error_msg,400
 
 
 
@@ -22,30 +28,36 @@ class LossManager():
         if loss:
             same_date_events = DALoss.list_by_date(harvest_date)
             if Validation.check_if_similar(crop_local,same_date_events):
-                abort(400, {"message":"Eventos similares existem no sistema!"})
+                return "Eventos similares existem no sistema!",400
             else:
                 error_msg = Validation.validate(producer_CPF,producer_email)
                 if error_msg == None:
                     DALoss.edit_loss(id,producer_name, producer_email, producer_CPF, crop_local, crop_type, harvest_date, event_type)
+                    return id,200
                 else:
-                    abort(400, {"message": error_msg})
+                    return error_msg,400
         else:
-            abort(400, {"message":"Perda não encontrada!"})
+            return "Perda não encontrada!",400
 
     def delete_loss(id):
         loss = LossManager.get_loss(id)
         if loss:
             DALoss.delete_loss(id)
+            return id,200
         else:
-            abort(400, {"message":"Perda não encontrada!"})
+            return "Perda não encontrada!",400
 
     def list_loss():
         loss = DALoss.list_loss()
-        return ListLossResponseBody(entries=[LossManager._build_response(item) for item in loss])
+        return ListLossResponseBody(entries=[LossManager._build_response(item) for item in loss]),200
 
     def list_loss_by_cpf(cpf):
         loss = DALoss.list_loss_by_cpf(cpf)
-        return ListLossResponseBody(entries=[LossManager._build_response(item) for item in loss])
+        return ListLossResponseBody(entries=[LossManager._build_response(item) for item in loss]),200
+
+    def get_loss(id):
+        loss = DALoss.get_loss(id)
+        return LossManager._build_response(loss),200
 
     def _build_response(data:tuple):
         return GetLossResponseBody(

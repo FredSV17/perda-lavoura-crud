@@ -2,6 +2,14 @@ from database.database_manager import DatabaseManager
 
 
 class DALoss():
+
+    def clear_table():
+        db_conn = DatabaseManager()
+        sql_exec = """DELETE FROM loss"""
+        db_conn.cursor.execute(sql_exec)
+        db_conn.connection.commit()
+        db_conn.close_connection()      
+
     def new_loss(producer_name, producer_email, producer_CPF, crop_local, crop_type, harvest_date, event_type):
         db_conn = DatabaseManager()
         sql_exec = """INSERT INTO loss(producer_name,
@@ -15,7 +23,10 @@ class DALoss():
         loss = (producer_name,producer_email,producer_CPF,crop_local,crop_type,harvest_date,event_type)
         db_conn.cursor.execute(sql_exec,loss)
         db_conn.connection.commit()
+        id = db_conn.cursor.lastrowid
         db_conn.close_connection()
+        return id
+
 
     def edit_loss(id,producer_name, producer_email, producer_CPF, crop_local, crop_type, harvest_date, event_type):
         db_conn = DatabaseManager()

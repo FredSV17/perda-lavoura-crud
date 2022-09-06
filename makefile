@@ -6,3 +6,6 @@ run-api-docker:
 
 run-api:
 	python3 -m flask --app main run --host=0.0.0.0
+
+test-api:
+	python3 -m pytest
