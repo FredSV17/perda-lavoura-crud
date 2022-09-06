@@ -26,7 +26,7 @@ class LossManager():
     def edit_loss(id,producer_name, producer_email, producer_CPF, crop_local, crop_type, harvest_date, event_type):
         loss = LossManager.get_loss(id)
         if loss:
-            same_date_events = DALoss.list_by_date(harvest_date)
+            same_date_events = DALoss.list_by_date(harvest_date,id)
             if Validation.check_if_similar(crop_local,same_date_events):
                 return "Eventos similares existem no sistema!",400
             else:
@@ -57,7 +57,10 @@ class LossManager():
 
     def get_loss(id):
         loss = DALoss.get_loss(id)
-        return LossManager._build_response(loss),200
+        if loss:
+            return LossManager._build_response(loss),200
+        else:
+            return "Perda não encontrada!",400
 
     def _build_response(data:tuple):
         return GetLossResponseBody(

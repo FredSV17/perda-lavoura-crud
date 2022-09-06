@@ -60,10 +60,10 @@ class DALoss():
         db_conn.close_connection()
         return result
 
-    def list_by_date(date):
+    def list_by_date(date,id=-1):
         db_conn = DatabaseManager()
-        sql_exec = """SELECT * FROM loss WHERE harvest_date=%s"""
-        params = (date,)
+        sql_exec = """SELECT * FROM loss WHERE id!=%s AND harvest_date=%s"""
+        params = (id,date)
         db_conn.cursor.execute(sql_exec,params)
         result = db_conn.cursor.fetchall()
         db_conn.close_connection()

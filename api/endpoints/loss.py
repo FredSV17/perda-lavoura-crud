@@ -30,7 +30,7 @@ def edit(id: int,body:PostLossResponseBody):
     resp,status = LossManager.edit_loss(id,
                          body.producer_name,
                          body.producer_email,
-                         body.producer_CPF,
+                         body.producer_cpf,
                          body.crop_local,
                          body.crop_type,
                          body.harvest_date,
@@ -46,21 +46,21 @@ def delete(id):
 
 
 
-@loss_blup.route('/<cpf>',methods=['GET'])
+@loss_blup.route('/cpf/<cpf>',methods=['GET'])
 @validate()
 def list_by_cpf(cpf):
     loss = LossManager.list_loss_by_cpf(cpf)
-    return loss
+    return "" if loss == None else loss
 
-@loss_blup.route('/<cpf>',methods=['GET'])
+@loss_blup.route('/<id>',methods=['GET'])
 @validate()
 def get_loss(id):
     loss,status = LossManager.get_loss(id)
     return loss,status
 
 
-@loss_blup.route('/',methods=['GET'])
+@loss_blup.route('',methods=['GET'])
 @validate()
 def list_all():
     loss = LossManager.list_loss()
-    return loss
+    return "" if loss == None else loss
