@@ -1,10 +1,11 @@
 import flask
 import flask_mysqldb
 from flask_mysqldb import MySQL
+from flask_cors import CORS
 
 def create_app():
     app = flask.Flask(__name__)
-
+    CORS(app)
     app.config["DEBUG"] = True
     app.config["MYSQL_HOST"] = 'host.docker.internal'
     app.config["MYSQL_PASSWORD"] = ''

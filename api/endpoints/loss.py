@@ -1,4 +1,4 @@
-from flask import Blueprint, Response
+from flask import Blueprint, Response, jsonify
 from api_models.loss_model import PostLossResponseBody
 from controller.loss_controller import LossManager
 from flask_pydantic import validate
@@ -62,5 +62,5 @@ def get_loss(id):
 @loss_blup.route('',methods=['GET'])
 @validate()
 def list_all():
-    loss = LossManager.list_loss()
-    return "" if loss == None else loss
+    loss,status = LossManager.list_loss()
+    return "" if loss == None else loss,status
