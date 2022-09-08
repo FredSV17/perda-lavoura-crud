@@ -21,7 +21,8 @@ def test_create_loss_1(test_client):
 
     response = test_client.post('loss/create',json=body)
     assert response.status_code == 201
-    LOSS_1_ID = int(response.data)
+    data = json.loads(response.data.decode('utf-8'))
+    LOSS_1_ID = data.get('id')
     assert LOSS_1_ID > 0
 
 # def test_create_loss_4(test_client):
@@ -87,7 +88,8 @@ def test_create_loss_2(test_client):
     }
     response = test_client.post('loss/create',json=body)
     assert response.status_code == 400
-    assert response.data.decode("utf-8") == "Email inválido"
+    data = json.loads(response.data.decode('utf-8'))
+    assert data.get("message") == "Email inválido"
 
 # Cria com cpf inválido
 def test_create_loss_3(test_client):
@@ -102,7 +104,8 @@ def test_create_loss_3(test_client):
     }
     response = test_client.post('loss/create',json=body)
     assert response.status_code == 400
-    assert response.data.decode("utf-8") == "CPF inválido"
+    data = json.loads(response.data.decode('utf-8'))
+    assert data.get("message") == "CPF inválido"
 
 #Cria outra perda
 def test_create_loss_4(test_client):
@@ -124,7 +127,8 @@ def test_get_loss_2(test_client):
     response = test_client.get('loss/9999')
 
     assert response.status_code == 400
-    assert response.data.decode("utf-8") == "Perda não encontrada!"
+    data = json.loads(response.data.decode('utf-8'))
+    assert data.get("message") == "Perda não encontrada!"
 
 
 # Lista perdas

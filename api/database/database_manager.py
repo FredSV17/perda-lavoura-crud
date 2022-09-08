@@ -1,14 +1,15 @@
 from multiprocessing import connection
 import flask_mysqldb
 import mysql.connector
-from flask_mysqldb import MySQL    
+from flask_mysqldb import MySQL
+import os
 
 class DatabaseManager:
     connection = None
     cursor = None
     def __init__(self) -> None:
         self.connection = mysql.connector.connect(
-            host="localhost",
+            host=os.environ['SQL_CONNECTION'],
             user="root",
             password="",
             database="loss_db"

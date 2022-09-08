@@ -1,17 +1,74 @@
-<form class="form-group">
+<div [formGroup]="lossForm" class="container">
   <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Email</mat-label>
-    <input type="email" matInput [formControl]="emailFormControl" [errorStateMatcher]="matcher"
-           placeholder="Ex. pat@example.com">
-    <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-      Email inválido!
-    </mat-error>
-    <mat-error *ngIf="emailFormControl.hasError('required')">
-      É necessário informar o <strong>e-mail</strong>!
+    <mat-label>Nome do produtor</mat-label>
+    <input type="email" matInput formControlName="producer_name" [errorStateMatcher]="matcher">
+    <mat-error *ngIf="lossForm.controls['producer_name'].errors?.['required']">
+      É necessário informar o <strong>nome do produtor</strong>!
     </mat-error>
   </mat-form-field>
-</form>
-<form class="form-group">
-  <button mat-button color="primary">Confirmar</button>
-  <button mat-button>Voltar</button>
-</form>
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Email do produtor</mat-label>
+    <input type="email" matInput formControlName="producer_email" [errorStateMatcher]="matcher"
+           placeholder="Ex. pat@example.com">
+    <mat-error *ngIf="lossForm.controls['producer_email'].errors?.['email'] && !lossForm.controls['producer_email'].errors?.['required']">
+      Email inválido!
+    </mat-error>
+    <mat-error *ngIf="lossForm.controls['producer_email'].errors?.['required']">
+      É necessário informar o <strong>e-mail do produtor</strong>!
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>CPF do produtor</mat-label>
+    <input type="email" matInput formControlName="producer_cpf" [errorStateMatcher]="matcher"
+           placeholder="000.000.000-00">
+    <mat-error *ngIf="lossForm.controls['producer_cpf'].errors?.['cpfNotValid'] && !lossForm.controls['producer_cpf'].errors?.['required']">
+      CPF inválido!
+    </mat-error>
+    <mat-error *ngIf="lossForm.controls['producer_cpf'].errors?.['required']">
+      É necessário informar o <strong>cpf do produtor</strong>!
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Local da lavoura</mat-label>
+    <input type="email" matInput formControlName="crop_local" [errorStateMatcher]="matcher"
+           placeholder="latitude,longitude">
+    <mat-error *ngIf="lossForm.controls['crop_local'].errors?.['pattern'] && !lossForm.controls['crop_local'].errors?.['required']">
+      Local inválido!
+    </mat-error>
+    <mat-error *ngIf="lossForm.controls['crop_local'].errors?.['required']">
+      É necessário informar o <strong>local da lavoura!</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Data da colheita</mat-label>
+    <input type="email" matInput formControlName="harvest_date" [errorStateMatcher]="matcher"
+           placeholder="dd/mm/aaaa">
+    <mat-error *ngIf="lossForm.controls['harvest_date'].errors?.['ptDate'] && !lossForm.controls['harvest_date'].errors?.['required']">
+      Data inválida!
+    </mat-error>
+    <mat-error *ngIf="lossForm.controls['harvest_date'].errors?.['required']">
+      É necessário informar a <strong>data da colheita!</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Tipo da colheita</mat-label>
+    <input type="email" matInput formControlName="crop_type" [errorStateMatcher]="matcher"
+           placeholder="milho,soja,trigo, etc.">
+    <mat-error *ngIf="lossForm.controls['crop_type'].errors?.['required']">
+      É necessário informar o <strong>tipo da colheita!</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Evento ocorrido</mat-label>
+    <mat-select formControlName="event_type">
+      <mat-option *ngFor="let event of eventTypeList" [value]="event.value">{{event.text}}</mat-option>
+      <mat-error *ngIf="lossForm.controls['event_type'].errors?.['required']">
+        É necessário informar o <strong>evento ocorrido!</strong>
+      </mat-error>
+    </mat-select>
+  </mat-form-field>
+  <form class="button-area">
+    <button mat-button (click)="back()">Voltar</button>
+    <button mat-button [disabled]="!lossForm.valid" (click)="submit()" color="primary">Confirmar</button>
+  </form>
+</div>

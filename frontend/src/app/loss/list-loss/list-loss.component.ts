@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -13,34 +14,78 @@ import { LossService } from 'src/app/services/loss.service';
 // {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
 // {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
 // {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-let ELEMENT_DATA: any;
+
 
 @Component({
   selector: 'app-list-loss',
   templateUrl: './list-loss.component.html',
-  styleUrls: ['./list-loss.component.css']
+  styleUrls: ['./list-loss.component.scss']
 })
 export class ListLossComponent implements OnInit {
-
+  ELEMENT_DATA: any = [];
+  load_table:boolean = false;
+  displayedColumns: string[] = ['producer_name','producer_cpf','harvest_date','event_type','crop_type','ações'];
+  dataSource: any = [];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private lossService: LossService  ) {}
+    private lossService: LossService,
+    public datePipe: DatePipe  ) {}
 
   async ngOnInit() {
-    const response = await this.lossService.list_loss();
-    console.log(response)
-    // ELEMENT_DATA = response.entries
-    // console.log(response)
+    await this.call_list_loss()
   }
 
-  displayedColumns: string[] = ['producer_name'];
-  //, 'name', 'weight', 'symbol'
-  dataSource = ELEMENT_DATA;
+  async call_list_loss(){
+    await (await this.lossService.list_loss()).subscribe((response) => {
+      console.log(response.entries)
+      this.ELEMENT_DATA = response.entries
+      // this.ELEMENT_DATA.harvest_date = 
+      this.dataSource = this.ELEMENT_DATA;
+      this.load_table = true;
+    });
+  }
+
+  async call_list_loss_by_cpf(cpf: string){
+    await (await this.lossService.list_loss_by_cpf(cpf)).subscribe((response) => {
+      console.log(response.entries)
+      this.ELEMENT_DATA = response.entries
+      this.dataSource = this.ELEMENT_DATA;
+      this.load_table = true;
+    });
+  }
+
+
+  search_for:string = "";
+  async search_input(event: any){
+    this.search_for = event.target.value
+  }
+
+  async search_cpf(){
+    this.load_table = false;
+    console.log(this.search_for)
+    if (this.search_for == ""){
+      await this.call_list_loss()
+    }
+    else{
+      await this.call_list_loss_by_cpf(this.search_for)
+    }
+  }
 
   goto_create(){
     this.router.navigate(['/create']);
   }
+
+  edit(id: string){
+    this.router.navigate(['/edit',id]);
+  }
+  detail(id: string){
+    this.router.navigate(['/detail',id]);
+  }
+  delete(id: string){
+    this.router.navigate(['/delete',id]);
+  }
+
 }
 
 // constructor(
