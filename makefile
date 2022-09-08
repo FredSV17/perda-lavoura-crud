@@ -1,4 +1,5 @@
 export SQL_CONTAINER=sqlcontainer
+export SQL_CONNECTION=localhost
 PROJ_NETWORK=projnetwork
 IMAGE_SQL=imgsql
 IMAGE_API=imgapi
@@ -29,7 +30,6 @@ run-api-docker:
 	docker run --name $(API_CONTAINER) --rm --network projnetwork -d -p 5000:5000 -e SQL_CONNECTION=$(SQL_CONTAINER) $(IMAGE_API)
 
 run-api:
-	export SQL_CONNECTION=localhost
 	cd api ; \
 	source venv/bin/activate ; \
 	python3 -m flask --app main run --host=0.0.0.0
@@ -44,5 +44,5 @@ run-front:
 	ng serve
 
 run-front-docker:
-	docker run --name $(FRONT_CONTAINER) -p 8080:80 imgfront 
+	docker run --name $(FRONT_CONTAINER) -d -p 8080:80 imgfront 
 	
